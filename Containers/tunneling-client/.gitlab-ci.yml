@@ -1,0 +1,15 @@
+image: docker:stable
+services:
+  - docker:18.09-dind
+variables:
+  DOCKER_DRIVER: overlay
+  DOCKER_HOST: tcp://localhost:2375
+stages:
+  - docker
+docker-build-push:
+  stage: docker
+  script:
+  - docker login -u $registry_user -p $registry_password $registry_url
+  - docker build -t $registry_url/docker/tunneling-client/alpine:latest .
+  - docker push $registry_url/docker/tunneling-client/alpine:latest
+
